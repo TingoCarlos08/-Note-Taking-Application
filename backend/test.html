@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probar conexión con la base de datos</title>
+</head>
+<body>
+    <h1>Crear Usuario</h1>
+    <form id="createUserForm">
+        <input type="text" id="nombre" placeholder="Nombre" required><br>
+        <input type="email" id="email" placeholder="Email" required><br>
+        <input type="password" id="contraseña" placeholder="Contraseña" required><br>
+        <button type="submit">Crear Usuario</button>
+    </form>
+
+    <h1>Ver Usuarios</h1>
+    <button id="getUsersBtn">Ver Usuarios</button>
+    <pre id="userList"></pre>
+
+    <script>
+        // Crear usuario
+        document.getElementById('createUserForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const contraseña = document.getElementById('contraseña').value;
+
+            fetch('http://localhost:3001/create-user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nombre, email, contraseña })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Usuario creado:', data);
+                alert('Usuario creado exitosamente');
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        // Ver usuarios
+        document.getElementById('getUsersBtn').addEventListener('click', function() {
+            fetch('http://localhost:3001/test-db')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('userList').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
