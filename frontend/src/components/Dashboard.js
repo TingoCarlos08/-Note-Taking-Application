@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './Dashboard.css'; // Importamos el archivo CSS para aplicar estilos
 
-function Dashboard({ onLogout }) {  // Asegúrate de recibir la función de logout desde props
+function Dashboard({ onLogout }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -11,11 +12,19 @@ function Dashboard({ onLogout }) {  // Asegúrate de recibir la función de logo
   };
 
   return (
-    <div>
+    <div className="dashboard-container">
       <h2>Bienvenido al Dashboard</h2>
-      <button onClick={() => navigate('/create-note')}>Crear Nota</button>
-      <button onClick={() => navigate('/create-tag')}>Crear Etiqueta</button>
-      <button onClick={handleLogout}>Cerrar Sesión</button> {/* Asegurarse de que esto cierre sesión */}
+      <div className="dashboard-buttons">
+        <button onClick={() => navigate('/create-note')} className="dashboard-button">
+          Crear Nota
+        </button>
+        <button onClick={() => navigate('/create-tag')} className="dashboard-button">
+          Crear Etiqueta
+        </button>
+        <button onClick={handleLogout} className="dashboard-button logout-button">
+          Cerrar Sesión
+        </button>
+      </div>
     </div>
   );
 }

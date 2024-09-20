@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, Link } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import CreateNote from './components/CreateNote';
 import CreateTag from './components/CreateTag';
+import './App.css'; // Importar los estilos
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -38,10 +39,13 @@ function App() {
             <>
               {/* Si no está autenticado, mostrar las opciones de Login y Registro en la página principal */}
               <Route path="/" element={
-                <div>
-                  <h2>Bienvenido a la aplicación</h2>
-                  <p><a href="/login">Iniciar Sesión</a></p>
-                  <p><a href="/register">Registrarse</a></p>
+                <div className="home-container">
+                  <h1>Bienvenido a la Aplicación</h1>
+                  <p>Gestiona tus notas y etiquetas de manera sencilla.</p>
+                  <div className="home-buttons">
+                    <Link to="/login" className="button">Iniciar Sesión</Link>
+                    <Link to="/register" className="button">Registrarse</Link>
+                  </div>
                 </div>
               } />
               <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
