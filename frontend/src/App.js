@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import CreateNote from './components/CreateNote';
 import CreateTag from './components/CreateTag';
-import './App.css'; // Importar los estilos
+import './App.css'; // Importar estilos
 
-function App() {
+const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Verificar si hay un token almacenado en el localStorage al cargar la aplicación
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      setIsAuthenticated(true); // El usuario está autenticado
+      setIsAuthenticated(true); // Si hay un token en localStorage, el usuario está autenticado
+    } else {
+      setIsAuthenticated(false); // Si no hay token, asegurarse de marcar como no autenticado
     }
   }, []);
 
-  // Función para manejar el cierre de sesión
   const handleLogout = () => {
-    setIsAuthenticated(false); // Cambiar el estado de autenticación
+    localStorage.removeItem('token'); // Remover el token al cerrar sesión
+    setIsAuthenticated(false); // Actualizar el estado de autenticación
   };
 
   return (
@@ -29,35 +30,32 @@ function App() {
         <Routes>
           {isAuthenticated ? (
             <>
-              {/* Mostrar el dashboard si el usuario está autenticado */}
               <Route path="/dashboard" element={<Dashboard onLogout={handleLogout} />} />
               <Route path="/create-note" element={<CreateNote />} />
               <Route path="/create-tag" element={<CreateTag />} />
-              <Route path="/" element={<Navigate to="/dashboard" />} /> {/* Redirigir al dashboard */}
+              <Route path="/" element={<Navigate to="/dashboard" />} />
             </>
           ) : (
             <>
-              {/* Si no está autenticado, mostrar las opciones de Login y Registro en la página principal */}
-              <Route path="/" element={
-                <div className="home-container">
-                  <h1>Bienvenido a la Aplicación</h1>
-                  <p>Gestiona tus notas y etiquetas de manera sencilla.</p>
-                  <div className="home-buttons">
-                    <Link to="/login" className="button">Iniciar Sesión</Link>
-                    <Link to="/register" className="button">Registrarse</Link>
+              <Route
+                path="/"
+                element={
+                  <div>
+                    <h2>Bienvenido a la aplicación</h2>
+                    <button onClick={() => window.location.href = '/login'}>Iniciar Sesión</button>
+                    <button onClick={() => window.location.href = '/register'}>Registrarse</button>
                   </div>
-                </div>
-              } />
+                }
+              />
               <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
               <Route path="/register" element={<Register />} />
-              {/* Si el usuario intenta acceder a rutas protegidas sin autenticarse */}
-              <Route path="*" element={<Navigate to="/" />} /> {/* Redirigir a la página de inicio */}
+              <Route path="*" element={<Navigate to="/" />} />
             </>
           )}
         </Routes>
       </div>
     </Router>
   );
-}
+};
 
 export default App;

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import './CreateTag.css'; // Importar archivo CSS para diseño
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import './CreateTag.css';
 
-function CreateTag() {
+const CreateTag = () => {
   const [tagName, setTagName] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate(); // Para navegar al dashboard
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!tagName) {
@@ -13,10 +16,25 @@ function CreateTag() {
       return;
     }
 
-    // Aquí puedes realizar la lógica para guardar la etiqueta (por ejemplo, enviar a una API)
-    alert(`Etiqueta "${tagName}" creada con éxito!`);
-    setTagName('');
-    setError('');
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(
+        'http://localhost:3001/api/tags',
+        { tag_name: tagName },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      // Limpiar el formulario después de guardar la etiqueta
+      setTagName('');
+      setError('');
+      alert('Etiqueta guardada con éxito');
+      navigate('/dashboard'); // Redirigir al dashboard después de crear la etiqueta
+    } catch (err) {
+      setError('Hubo un error al crear la etiqueta');
+      console.error(err);
+    }
   };
 
   return (
@@ -31,10 +49,13 @@ function CreateTag() {
           className="tag-input"
         />
         <button type="submit" className="tag-button">Guardar Etiqueta</button>
+        <button type="button" onClick={() => navigate('/dashboard')} className="tag-button">
+          Volver al Dashboard
+        </button>
       </form>
       {error && <p className="tag-error">{error}</p>}
     </div>
   );
-}
+};
 
 export default CreateTag;

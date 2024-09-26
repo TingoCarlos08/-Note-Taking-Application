@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Importar useNavigate para redirigir
-import './Login.css'; // Importar el archivo CSS para estilos
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import './Login.css'; // Import the CSS file for styling
 
-function Login({ onLogin }) {
-  const [email, setEmail] = useState('');
+const Login = ({ onLogin }) => {
+  const [email, setEmail] = useState(''); // Use specific typing for email and password
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Para manejar el estado de carga
-  const navigate = useNavigate(); // Hook para redirigir
+  const [error, setError] = useState(''); // Error handling
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const navigate = useNavigate(); // Hook for navigation
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true); // Iniciar el estado de carga
+    setIsLoading(true);
 
     try {
       const response = await axios.post('http://localhost:3001/login', {
@@ -20,14 +21,14 @@ function Login({ onLogin }) {
         contraseña: password
       });
 
-      localStorage.setItem('token', response.data.token); // Guardar el token en localStorage
-      onLogin(); // Notificar al componente principal que el usuario ha iniciado sesión
-      navigate('/dashboard'); // Redirigir a la página del dashboard
+      localStorage.setItem('token', response.data.token); // Save the token to localStorage
+      onLogin(); // Notify the parent component about login
+      navigate('/dashboard'); // Redirect to the dashboard page
     } catch (err) {
       setError('Error de autenticación. Por favor, verifica tus credenciales.');
       console.error(err);
     } finally {
-      setIsLoading(false); // Detener el estado de carga
+      setIsLoading(false); // Stop the loading state
     }
   };
 
@@ -56,6 +57,6 @@ function Login({ onLogin }) {
       {error && <p className="login-error">{error}</p>}
     </div>
   );
-}
+};
 
 export default Login;

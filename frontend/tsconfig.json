@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "jsx": "react-jsx",  // This is updated for React 17+ JSX transformation
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",  // This helps resolve module imports
+    "resolveJsonModule": true,  // In case you are importing JSON files
+    "isolatedModules": true  // Required for React apps
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
